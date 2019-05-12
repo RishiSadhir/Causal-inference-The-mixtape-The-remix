@@ -1,0 +1,24 @@
+---
+title: "2 - Probability theory and statistics review"
+output: html_notebook
+---
+
+# Basic probability theory
+
+## Introductory definitions
+
+* *Random process*: A process that, when repeated multiple times, can lead to different outcomes. Can be _discrete_ or _continuous_.
+* *Sample space*: Set of all possible outcomes a random process can have.
+* *Logical independence*: Two events that can not affect one another.
+* *Statistical independence*: Two events $A$ and $B$ are statistically independent if $Pr(A|B) = Pr(A)$.
+* *Joint probability*: For independent events, calculating joint probabilities is to multiply the maringal probabilities: $Pr(A, B) = Pr(A)Pr(B)$.
+
+# Events and conditional probability
+
+# Probability tree
+
+# Contingency tables
+
+# Monty hall example
+
+# Exercises
