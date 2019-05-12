@@ -5,15 +5,34 @@ output: html_notebook
 
 # Basic probability theory
 
+```{r setup}
+library(tidyverse)
+```
+
+
 ## Introductory definitions
 
 * *Random process*: A process that, when repeated multiple times, can lead to different outcomes. Can be _discrete_ or _continuous_.
 * *Sample space*: Set of all possible outcomes a random process can have.
 * *Logical independence*: Two events that can not affect one another.
 * *Statistical independence*: Two events $A$ and $B$ are statistically independent if $Pr(A|B) = Pr(A)$.
-* *Joint probability*: For independent events, calculating joint probabilities is to multiply the maringal probabilities: $Pr(A, B) = Pr(A)Pr(B)$.
+* *Joint probability*: For independent events, calculating joint probabilities is to multiply the maringal probabilities: $Pr(A, B) = Pr(A)Pr(B)$. For example: $Pr(heads, heads, heads) = (.5)^3$.
 
-# Events and conditional probability
+> Question: What is the probability of rolling a 7 using two dice, and is it the same as the probability of rolling a 3?
+
+```{r}
+df <- crossing(D1 = 1:6, D2 = 1:6) %>% 
+  mutate(outcome = D1 + D2)
+
+tibble(
+  "Pr(outcome = 7)" = df %>% 
+    filter(outcome == 7) %>% 
+    nrow(),
+  "Pr(outcome = 3)" = df %>% 
+    filter(outcome == 3) %>% 
+    nrow()) %>% 
+  magrittr::divide_by(nrow(df))
+```
 
 # Probability tree
 
