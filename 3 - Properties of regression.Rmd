@@ -1,12 +1,232 @@
 ---
 title: "Properties of Regression"
-output: html_notebook
+output: 
+  html_notebook:
+    toc: yes
 ---
 
 ```{r setup}
+knitr::opts_chunk$set(include = FALSE)
 library(tidyverse)
 
+theme_set(theme_grey() %+replace%
+            theme(panel.grid = element_blank(),
+                  panel.background = element_rect(fill = "transparent", colour = "black")))
 ```
+
+# Summations
+
+Summations can be distributed and constants can be pulled out. For any constant $a$ and $b$: 
+$$
+\sum_{i=1}^{n}(ax_i + by_i) = a \sum_{i=1}^{n} x_i + b \sum_{i=1}^{n}
+$$
+
+
+
+# Averages
+
+We can calculate the average of random variable $x_i$ like so:
+
+$$
+\begin{align}
+\bar{x} =& \frac{1}{n} \sum_{i=1}^{n}x_i
+\\ =& \frac{x_1 + x_2 + \dots + x_n}{n}
+\end{align}
+$$
+
+Cunningham claims that the sum of deviations from the mean is always equal to 0. 
+
+$$
+\sum_{i=1}^{n} (x_i - \bar(x)) = 0
+$$
+
+Lets verify this using 100 simulations of a normal distribution.
+```{r}
+sum_of_deviations <- function(vec) {
+  sum((vec - mean(vec)))
+}
+
+rerun(100, sum_of_deviations(rnorm(1e3))) %>% 
+  simplify %>% 
+  enframe %>% 
+  ggplot(aes(value)) +
+    geom_line(stat = "density") +
+    xlim(c(-1, 1)) + ylab("") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank()) +
+    ggtitle("Deviations from the mean sum to 0",
+            "100 simulations of 1000 draws from Normal(0, 1)")
+```
+
+Fair enough, you've won this time, Cunningham.
+
+Another property of summations:
+$$
+\sum_{i=1}^{n}(x_i - \bar{x})^2 = \sum_{i=1}^{n}x_i^2 - n(\bar{x})
+$$
+
+# Expected value
+
+Sometimes called the `expectation` or the `population mean`, the ***expected value*** is the weighted average of the possible values that the variable can take. Each weight corresponds to the probability of each value occurring in the population.
+
+$$
+\begin{align}
+E(X) =& x_1Pr(x_1) + x2Pr(x_2) + \dots + x_kPr(x_k)
+\\ =& \sum_{j=1}^{k} x_jPr(x_j)
+\end{align}
+$$
+
+## Special properties of expectations
+
+For random variables W, H and constants a, b:
+
+$$
+\begin{align}
+E(b) &= b \\
+E(aW + B) &= aE(W) + b\\
+E(W + H) &= E(W) + E(H)\\
+E(\sum_{i=1}^{n}a_iX_i) &= \sum_{i=1}^na_iE(X_i)\\
+E(W - E(W)) &= 0
+\end{align}
+$$
+
+Remember, the expectation operator represents a population concept. It refers not just to the data we have at hand, but also to the larger sample space from which the data was drawn.
+
+# Variance
+
+Variance is another population paramter. The variance of a random variable is defined as follows:
+
+$$
+V(W) = \sigma^2 = E[(W - E(W))^2] = E(W^2) - E(W)^2
+$$
+
+In a sample of data this is estimated with a degree of freedom adjustment. In large samples, the adjustment is usually unnecessary.
+
+$$
+\hat{S}^2 = \frac{ \sum_{i=1}^n(x_i - \bar{x})^2}{n-1}
+$$
+
+## Special properties of variances
+
+$$
+V(aX + b) = a^2V(X)
+$$
+
+The variance of a constant is 0.
+
+The variance of the sum of two random variables is below. Note that if X and Y are independent then $E(XY) = E(X)E(Y)$ making $V(X + Y) = V(X) + V(Y)$
+
+$$
+\begin{align}
+V(X + Y) &= V(X) + V(Y) + 2(E(XY)) - E(X)E(Y)) \\
+&= V(X) + V(Y) + 2C(X,Y)
+\end{align}
+$$
+
+# Covariance
+The last part of the last equation ($E(XY) - E(X)E(Y)$) is known as the covariance. It measures the amount of linear dependence between two random variables.
+
+$$
+C(X, Y) = E(XY) - E(X)E(Y)
+$$
+
+```{r}
+x <- rnorm(1e3)
+y <- rnorm(1e3)
+
+tibble(
+  cov(x, y),
+  mean(x * y) - mean(x) * mean(y)
+)
+
+```
+
+
+I actually find this restatement of expected value easier to understand. It obviates the idea that covariance describes how two random variables deviate from their means in tandem.
+$$
+C(X, Y) = E[(X - E[X]) (Y - E[Y])]
+$$
+
+## Correlation
+
+Interpreting the magnitude of covariance is tricky so we use correlation instead.
+
+$$
+W = \frac{X-E(X)}{\sqrt{V(X)}}, Z = \frac{Y-E(Y)}{\sqrt{V(Y)}}\\
+Corr(W, Z) = \frac{C(X, Y)}{\sqrt{V(X)V(Y)}}
+$$
+
+# Population model
+
+We can assume that a functional form exists that describes the relationship between two population variables. Below we use the _linear bivariate regression model_.
+
+$$
+y = \beta_0 + \beta_1x + u
+$$
+This formulation assumes a linear relationship between x and y. The error term, $u$, allows other factors not captured in the regression to affect y. Using a few assumptions, we can try and estimate our population parameters, $\beta_0$ and $\beta_1$ from data.
+
+Assumption 1: The average error is 0. This will usually bear out because we can just bias $\beta_0$ until its true. Note that this would have no effect on $\beta_1$
+$$
+E(u) = 0
+$$
+
+# Mean independence
+
+If the below equation holds, then we say u is mean independent of x.
+
+$$
+E(u|x) = E(u) \text{ for all values of }x
+$$
+
+This basically means that the mean of the error term is 0 no matter how you slice the population. If we were trying to measure the relationship between wages (y) and schooling (x), we want to be able to say that the expected error is 0 no matter what level of schooling we examine. We can force this to be true with a simple bias to the intercept as it would have to vary with x and therefore affect $beta_1$.
+
+When we combine this assumption with the first assumption of average error, we get to the zero conditional mean assumption.
+
+$$
+E(u | x) = 0 \text{ for all values }x
+$$
+
+This allows us to recast the population regression function like so:
+
+$$
+E(y | x) = \beta_0 + \beta_1x
+$$
+
+# Least Squares
+
+We can fit our betas with least squares. First of all, we know these two things from our simplifying assumptions of (1) 0 error and (2) mean independence:
+
+$$
+\begin{align}
+[1]& & E(u) = 0 \\
+[2]& & C(x, u) = 0\\
+\end{align}
+$$
+
+Now then, lets plug and play $u$ in to these equations by rearranging our model $u = y_i - \beta_0 - \beta_1 x$:
+
+$$
+\begin{align}
+[1]& & E(y - \beta_0 - \beta_1 x) = 0 \rightarrow \frac{1}{n} \sum_{i=1}^n (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) =  0\\
+[2]& & E(x[y - \beta_0 - \beta_1 x]) = 0 \rightarrow \frac{1}{n} \sum_{i=1}^n (x_i[y_i - \hat{\beta_0} - \hat{\beta_1}x_i]) = 0\\
+\end{align}
+$$
+
+You can expand out the summation in [1] to get the following.
+$$
+\hat{\beta_0} = \bar{y} - \hat{\beta_1}\bar{x}
+$$
+
+Expand out [2] and plug in [1] and you finally get
+$$
+\hat{\beta_1} = \frac{\sum{x_i - \bar{x}(y_i - \bar{y})}}{\sum(x_i - \bar{x})^2} = \frac{\text{sample covariance}(x_i, y_i)}{\text{sample variance}(x_i)}
+$$
+
+Note that this implies we need variation in $x_i$ to properly. Once we have our model, we can make predictions and calculate _residuals_.
+
+$$
+\hat{u_i} = y_i - \hat{y_i}
+$$
 
 ```{r}
 set.seed(1)
@@ -33,9 +253,10 @@ ggplot(df, aes(x, y)) +
     annotate("text", y = -30, x = 2.5, 
            label = paste("slope =", round(coef(fit)[2], 5)), 
            colour = "blue", size = 3) +
-  theme(panel.background = element_rect(fill = "white", colour ="black")) +
   ggtitle("OLS Regression Line")
 ```
+
+# Algebraic properties of OLS
 
 ```{r}
 df %>% 
@@ -43,7 +264,29 @@ df %>%
   ggplot(aes(yhat, residuals)) +
     geom_hline(yintercept = 0) +
     geom_point(alpha = .8) +
-    theme(panel.background = element_rect(fill = "white", colour ="black")) +
     xlab("Fitted values") + ylab("Residuals")
 ```
 
+# Goodness of Fit
+
+# Expected Value of OLS
+
+# Law of iterated expectations
+
+# CEF Decomposition Property
+
+# CEF Prediction Property
+
+# ANOVA Theory
+
+# Linear CEF Theorem
+
+# Best Linear Predictor Theorem
+
+# Regression CEF Theorem
+
+# Regression anatomy theorem
+
+# Variance of the OLS estimators
+
+# Cluster robust standard errors

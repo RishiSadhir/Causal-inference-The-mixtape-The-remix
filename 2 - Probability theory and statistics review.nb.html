@@ -1765,76 +1765,83 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#basic-probability-theory">Basic probability theory</a></li>
+<li><a href="#monty-hall-example">Monty hall example</a></li>
+<li><a href="#exercises">Exercises</a></li>
+</ul>
+</div>
 
 <!-- rnb-text-begin -->
 <div id="basic-probability-theory" class="section level1">
 <h1>Basic probability theory</h1>
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5cbmBgYCJ9 -->
-<pre class="r"><code>library(tidyverse)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdnZ3Bsb3QyJzpcbiAgbWV0aG9kICAgICAgICAgZnJvbSBcbiAgWy5xdW9zdXJlcyAgICAgcmxhbmdcbiAgYy5xdW9zdXJlcyAgICAgcmxhbmdcbiAgcHJpbnQucXVvc3VyZXMgcmxhbmdcblJlZ2lzdGVyZWQgUzMgbWV0aG9kIG92ZXJ3cml0dGVuIGJ5ICdydmVzdCc6XG4gIG1ldGhvZCAgICAgICAgICAgIGZyb21cbiAgcmVhZF94bWwucmVzcG9uc2UgeG1sMlxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1BdHRhY2hpbmcgcGFja2FnZXNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMS4yLjEg4pSA4pSAXHUwMDFiWzM5bVxuXHUwMDFiWzMwbVx1MDAxYlszMm3inJRcdTAwMWJbMzBtIFx1MDAxYlszNG1nZ3Bsb3QyXHUwMDFiWzMwbSAzLjEuMSAgICAgICBcdTAwMWJbMzJt4pyUXHUwMDFiWzMwbSBcdTAwMWJbMzRtcHVycnIgIFx1MDAxYlszMG0gMC4zLjIgIFxuXHUwMDFiWzMybeKclFx1MDAxYlszMG0gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzBtIDIuMS4xICAgICAgIFx1MDAxYlszMm3inJRcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5ciAgXHUwMDFiWzMwbSAwLjguMC5cdTAwMWJbMzFtMVx1MDAxYlszMG1cblx1MDAxYlszMm3inJRcdTAwMWJbMzBtIFx1MDAxYlszNG10aWR5ciAgXHUwMDFiWzMwbSAwLjguMyAgICAgICBcdTAwMWJbMzJt4pyUXHUwMDFiWzMwbSBcdTAwMWJbMzRtc3RyaW5nclx1MDAxYlszMG0gMS40LjAgIFxuXHUwMDFiWzMybeKclFx1MDAxYlszMG0gXHUwMDFiWzM0bXJlYWRyICBcdTAwMWJbMzBtIDEuMy4xICAgICAgIFx1MDAxYlszMm3inJRcdTAwMWJbMzBtIFx1MDAxYlszNG1mb3JjYXRzXHUwMDFiWzMwbSAwLjQuMCAgXHUwMDFiWzM5bVxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1Db25mbGljdHNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG5cdTAwMWJbMzFt4pyWXHUwMDFiWzMwbSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzBtOjpcdTAwMWJbMzJtZmlsdGVyKClcdTAwMWJbMzBtIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszMG06OmZpbHRlcigpXG5cdTAwMWJbMzFt4pyWXHUwMDFiWzMwbSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzBtOjpcdTAwMWJbMzJtbGFnKClcdTAwMWJbMzBtICAgIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszMG06OmxhZygpXHUwMDFiWzM5bVxuIn0= -->
-<pre><code>Registered S3 methods overwritten by 'ggplot2':
-  method         from 
-  [.quosures     rlang
-  c.quosures     rlang
-  print.quosures rlang
-Registered S3 method overwritten by 'rvest':
-  method            from
-  read_xml.response xml2
-[30m── [1mAttaching packages[22m ────────────────────────── tidyverse 1.2.1 ──[39m
-[30m[32m✔[30m [34mggplot2[30m 3.1.1       [32m✔[30m [34mpurrr  [30m 0.3.2  
-[32m✔[30m [34mtibble [30m 2.1.1       [32m✔[30m [34mdplyr  [30m 0.8.0.[31m1[30m
-[32m✔[30m [34mtidyr  [30m 0.8.3       [32m✔[30m [34mstringr[30m 1.4.0  
-[32m✔[30m [34mreadr  [30m 1.3.1       [32m✔[30m [34mforcats[30m 0.4.0  [39m
-[30m── [1mConflicts[22m ───────────────────────────── tidyverse_conflicts() ──
-[31m✖[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
-[31m✖[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<div id="introductory-definitions" class="section level2">
-<h2>Introductory definitions</h2>
+<p>Lets begin with some definitions.</p>
 <ul>
-<li><em>Random process</em>: A process that, when repeated multiple times, can lead to different outcomes. Can be <em>discrete</em> or <em>continuous</em>.</li>
-<li><em>Sample space</em>: Set of all possible outcomes a random process can have.</li>
-<li><em>Logical independence</em>: Two events that can not affect one another.</li>
-<li><em>Statistical independence</em>: Two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are statistically independent if <span class="math inline">\(Pr(A|B) = Pr(A)\)</span>.</li>
-<li><em>Joint probability</em>: For independent events, calculating joint probabilities is to multiply the maringal probabilities: <span class="math inline">\(Pr(A, B) = Pr(A)Pr(B)\)</span>. For example: <span class="math inline">\(Pr(heads, heads, heads) = (.5)^3\)</span>.</li>
+<li><p><strong>Random process</strong>: A process that, when repeated multiple times, can lead to different outcomes. Can be <em>discrete</em> or <em>continuous</em>.</p></li>
+<li><p><strong>Sample space</strong>: Set of all possible outcomes a random process can have.</p></li>
+<li><p><strong>Logical independence</strong>: Two events that can not affect one another.</p></li>
+<li><p><strong>Statistical independence</strong>: Two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are statistically independent if <span class="math inline">\(Pr(A|B) = Pr(A)\)</span>.</p></li>
 </ul>
+<blockquote>
+<blockquote>
+<p>Question: We draw an Ace from a deck of 52 cards then reshuffle the deck. What is the probability that our second draw is an Ace?</p>
+</blockquote>
+</blockquote>
+<p>Note that we are sampling with replacement in this question. The two events are statistically independent. <span class="math display">\[
+Pr(C_2 = Ace | C_1 = Ace) = Pr(C_2 = Ace) = \frac{count(Ace)}{SampleSpace} = \frac{4}{52} = .077
+\]</span></p>
+<ul>
+<li><strong>Joint probability</strong>: For independent events, calculating joint probabilities is to multiply the marginal probabilities: <span class="math inline">\(Pr(A, B) = Pr(A)Pr(B)\)</span>. For example: <span class="math inline">\(Pr(heads, heads, heads) = (.5)^3\)</span>.</li>
+</ul>
+<blockquote>
 <blockquote>
 <p>Question: What is the probability of rolling a 7 using two dice, and is it the same as the probability of rolling a 3?</p>
 </blockquote>
+</blockquote>
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUJtQTVLc1FDWURhMmlJbTY0RkF3TUxFNUREeU1EQ3dBbWlLNERTd2tBR1NKQVBKR0IvTkJRTTRQdzFoY2RsZ0FoTkkydGVZbTVxTVpBaEFOWU1FZVFQS05MSUx5MUp6czlOVmJCVk1OZkVLbXlzaVdZVVoxRit1UjdNT0Y2d0JCaWoycGVjazFnTXN3OG15SldTV0pLb2wxWUUxQXZrL1VQVHdwNWZVSktabndmVXhBVHlJU3VhWnNZaU5BR0IwanlRSzFKMGt6Tks4N0oxRGMxQU5rQ2R3NERxTkRpYkNXSW4wMytvV2F4UXM5aFM4OUl6ODFKaGpzOUpURXJOZ1hMNGdONEYrMWF2b0NnenJ3VG1GYUJvc1Y1SmZra2lUQjFYY240T1RBVHNPWVovQUs1a255blpBUUFBIn0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Pr(outcome = 7)"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Pr(outcome = 3)"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.1666667","2":"0.05555556"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-</div>
-<div id="probability-tree" class="section level1">
-<h1>Probability tree</h1>
-</div>
-<div id="contingency-tables" class="section level1">
-<h1>Contingency tables</h1>
+<ul>
+<li><p>Set theory can often be tought of in terms of venn diagrams.<span class="math inline">\(Pr(A, B) = Pr(A) + Pr(B) - Pr(A \cap B)\)</span></p></li>
+<li><p><strong>Conditional probabilitiy</strong>: In a world where A has occurred, what is the probability B will also occur? <span class="math inline">\(Prob(A|B) = \frac{Pr(A, B)}{Pr(B)}\)</span></p></li>
+</ul>
+<blockquote>
+<blockquote>
+<p>Question: What is the probability of rolling a 6 in dice 2, give that you rolled a 2 in dice 1?</p>
+</blockquote>
+</blockquote>
+<!-- rnb-text-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li><strong>Naive Bayes Rule</strong>: <span class="math inline">\(Pr(A|B) = \frac{Pr(B|A)Pr(A)}{Pr(B)}\)</span></li>
+</ul>
 </div>
 <div id="monty-hall-example" class="section level1">
 <h1>Monty hall example</h1>
+<p>Monty hall presents thee doors. Two have goats behind them, one has a million dollars behind them. Lets start by enumerating all the possible states these doors can take.</p>
+<!-- rnb-text-end -->
+<!-- rnb-text-begin -->
+<p>Now, lets say we open d1. Monty then opens d2 to reveal a goat. Whats the likelihood that d1 has a million dollars given what we know? What is the likelihood that d3 has a million dollars given what we know? Well we made the decision to open door 1 before anything was revealed. The probability that <code>d1 == M</code> is <span class="math inline">\(\frac{1}{3}\)</span>.</p>
+<!-- rnb-text-end -->
+<!-- rnb-text-begin -->
+<p>Monty doesn’t reveal doors willy nilly. Hes playing for keeps. So he only reveals door i if it doesn’t have a million dollars behind it. Lets refer to the revelation event as B. Lets suppose he revelas door 2 (<span class="math inline">\(b_2\)</span>)</p>
+<p><span class="math display">\[
+\begin{align}
+Pr(d_3 | b_2) =&amp; \frac{Pr(b_2 | d_3) \times Pr(d_3)}{Pr(b_2)} 
+\\ = &amp; \frac{Pr(b_2 | d_3) \times Pr(d_3)}{Pr(b_2|d_1)Pr(d_1) + Pr(b_2|d_2)Pr(d_2) + Pr(b_2|d_3)Pr(d_3)} 
+\\ = &amp; \frac {1 \times \frac{1}{3}} {1 \times \frac{1}{3} + 0 \times \frac{1}{3} + \frac{1}{2} \times \frac{1}{3}}
+\\ = &amp; \frac{2}{3}
+\end{align}
+\]</span></p>
 </div>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiMiAtIFByb2JhYmlsaXR5IHRoZW9yeSBhbmQgc3RhdGlzdGljcyByZXZpZXciCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMgQmFzaWMgcHJvYmFiaWxpdHkgdGhlb3J5CgpgYGB7ciBzZXR1cH0KbGlicmFyeSh0aWR5dmVyc2UpCmBgYAoKCiMjIEludHJvZHVjdG9yeSBkZWZpbml0aW9ucwoKKiAqUmFuZG9tIHByb2Nlc3MqOiBBIHByb2Nlc3MgdGhhdCwgd2hlbiByZXBlYXRlZCBtdWx0aXBsZSB0aW1lcywgY2FuIGxlYWQgdG8gZGlmZmVyZW50IG91dGNvbWVzLiBDYW4gYmUgX2Rpc2NyZXRlXyBvciBfY29udGludW91c18uCiogKlNhbXBsZSBzcGFjZSo6IFNldCBvZiBhbGwgcG9zc2libGUgb3V0Y29tZXMgYSByYW5kb20gcHJvY2VzcyBjYW4gaGF2ZS4KKiAqTG9naWNhbCBpbmRlcGVuZGVuY2UqOiBUd28gZXZlbnRzIHRoYXQgY2FuIG5vdCBhZmZlY3Qgb25lIGFub3RoZXIuCiogKlN0YXRpc3RpY2FsIGluZGVwZW5kZW5jZSo6IFR3byBldmVudHMgJEEkIGFuZCAkQiQgYXJlIHN0YXRpc3RpY2FsbHkgaW5kZXBlbmRlbnQgaWYgJFByKEF8QikgPSBQcihBKSQuCiogKkpvaW50IHByb2JhYmlsaXR5KjogRm9yIGluZGVwZW5kZW50IGV2ZW50cywgY2FsY3VsYXRpbmcgam9pbnQgcHJvYmFiaWxpdGllcyBpcyB0byBtdWx0aXBseSB0aGUgbWFyaW5nYWwgcHJvYmFiaWxpdGllczogJFByKEEsIEIpID0gUHIoQSlQcihCKSQuIEZvciBleGFtcGxlOiAkUHIoaGVhZHMsIGhlYWRzLCBoZWFkcykgPSAoLjUpXjMkLgoKPiBRdWVzdGlvbjogV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2Ygcm9sbGluZyBhIDcgdXNpbmcgdHdvIGRpY2UsIGFuZCBpcyBpdCB0aGUgc2FtZSBhcyB0aGUgcHJvYmFiaWxpdHkgb2Ygcm9sbGluZyBhIDM/CgpgYGB7cn0KZGYgPC0gY3Jvc3NpbmcoRDEgPSAxOjYsIEQyID0gMTo2KSAlPiUgCiAgbXV0YXRlKG91dGNvbWUgPSBEMSArIEQyKQoKdGliYmxlKAogICJQcihvdXRjb21lID0gNykiID0gZGYgJT4lIAogICAgZmlsdGVyKG91dGNvbWUgPT0gNykgJT4lIAogICAgbnJvdygpLAogICJQcihvdXRjb21lID0gMykiID0gZGYgJT4lIAogICAgZmlsdGVyKG91dGNvbWUgPT0gMykgJT4lIAogICAgbnJvdygpKSAlPiUgCiAgbWFncml0dHI6OmRpdmlkZV9ieShucm93KGRmKSkKYGBgCgojIFByb2JhYmlsaXR5IHRyZWUKCiMgQ29udGluZ2VuY3kgdGFibGVzCgojIE1vbnR5IGhhbGwgZXhhbXBsZQoKIyBFeGVyY2lzZXMK</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIjIgLSBQcm9iYWJpbGl0eSB0aGVvcnkgYW5kIHN0YXRpc3RpY3MgcmV2aWV3Ig0Kb3V0cHV0OiANCiAgaHRtbF9ub3RlYm9vazoNCiAgICB0b2M6IHllcw0KLS0tDQoNCiMgQmFzaWMgcHJvYmFiaWxpdHkgdGhlb3J5DQoNCmBgYHtyIHNldHVwfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGluY2x1ZGUgPSBGQUxTRSkNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHRpZHl2ZXJzZSkpDQpgYGANCg0KTGV0cyBiZWdpbiB3aXRoIHNvbWUgZGVmaW5pdGlvbnMuDQoNCiogKipSYW5kb20gcHJvY2VzcyoqOiBBIHByb2Nlc3MgdGhhdCwgd2hlbiByZXBlYXRlZCBtdWx0aXBsZSB0aW1lcywgY2FuIGxlYWQgdG8gZGlmZmVyZW50IG91dGNvbWVzLiBDYW4gYmUgX2Rpc2NyZXRlXyBvciBfY29udGludW91c18uDQoNCiogKipTYW1wbGUgc3BhY2UqKjogU2V0IG9mIGFsbCBwb3NzaWJsZSBvdXRjb21lcyBhIHJhbmRvbSBwcm9jZXNzIGNhbiBoYXZlLg0KDQoqICoqTG9naWNhbCBpbmRlcGVuZGVuY2UqKjogVHdvIGV2ZW50cyB0aGF0IGNhbiBub3QgYWZmZWN0IG9uZSBhbm90aGVyLg0KDQoqICoqU3RhdGlzdGljYWwgaW5kZXBlbmRlbmNlKio6IFR3byBldmVudHMgJEEkIGFuZCAkQiQgYXJlIHN0YXRpc3RpY2FsbHkgaW5kZXBlbmRlbnQgaWYgJFByKEF8QikgPSBQcihBKSQuDQoNCj4+IFF1ZXN0aW9uOiBXZSBkcmF3IGFuIEFjZSBmcm9tIGEgZGVjayBvZiA1MiBjYXJkcyB0aGVuIHJlc2h1ZmZsZSB0aGUgZGVjay4gV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgdGhhdCBvdXIgc2Vjb25kIGRyYXcgaXMgYW4gQWNlPyANCg0KTm90ZSB0aGF0IHdlIGFyZSBzYW1wbGluZyB3aXRoIHJlcGxhY2VtZW50IGluIHRoaXMgcXVlc3Rpb24uIFRoZSB0d28gZXZlbnRzIGFyZSBzdGF0aXN0aWNhbGx5IGluZGVwZW5kZW50Lg0KJCQNClByKENfMiA9IEFjZSB8IENfMSA9IEFjZSkgPSBQcihDXzIgPSBBY2UpID0gXGZyYWN7Y291bnQoQWNlKX17U2FtcGxlU3BhY2V9ID0gXGZyYWN7NH17NTJ9ID0gLjA3Nw0KJCQNCg0KDQoqICoqSm9pbnQgcHJvYmFiaWxpdHkqKjogRm9yIGluZGVwZW5kZW50IGV2ZW50cywgY2FsY3VsYXRpbmcgam9pbnQgcHJvYmFiaWxpdGllcyBpcyB0byBtdWx0aXBseSB0aGUgbWFyZ2luYWwgcHJvYmFiaWxpdGllczogJFByKEEsIEIpID0gUHIoQSlQcihCKSQuIEZvciBleGFtcGxlOiAkUHIoaGVhZHMsIGhlYWRzLCBoZWFkcykgPSAoLjUpXjMkLg0KDQoNCj4+IFF1ZXN0aW9uOiBXaGF0IGlzIHRoZSBwcm9iYWJpbGl0eSBvZiByb2xsaW5nIGEgNyB1c2luZyB0d28gZGljZSwgYW5kIGlzIGl0IHRoZSBzYW1lIGFzIHRoZSBwcm9iYWJpbGl0eSBvZiByb2xsaW5nIGEgMz8NCg0KYGBge3J9DQojIEVudW1lcmF0ZSBldmVyeSBwb3NzaWJsZSBvdXRjb21lDQpkZiA8LSBjcm9zc2luZyhEMSA9IDE6NiwgRDIgPSAxOjYpICU+JSANCiAgbXV0YXRlKG91dGNvbWUgPSBEMSArIEQyKQ0KDQpkZl9zb2x1dGlvbiA8LSB0aWJibGUoDQogICMgSG93IG1hbnkgd2F5cyBjYW4gd2UgZ2V0IDcNCiAgIlByKG91dGNvbWUgPSA3KSIgPSBkZiAlPiUgDQogICAgZmlsdGVyKG91dGNvbWUgPT0gNykgJT4lIA0KICAgIG5yb3coKSwNCiAgIyBIb3cgbWFueSB3YXlzIGNhbiB3ZSBnZXQgMw0KICAiUHIob3V0Y29tZSA9IDMpIiA9IGRmICU+JSANCiAgICBmaWx0ZXIob3V0Y29tZSA9PSAzKSAlPiUgDQogICAgbnJvdygpKSAlPiUgDQogICMgRGl2aWRlIGJ5IHRvdGFsIG51bWJlciBvZiBvdXRjb21lcw0KICBtYWdyaXR0cjo6ZGl2aWRlX2J5KG5yb3coZGYpKQ0KDQpwYW5kZXI6OnBhbmRvYy50YWJsZShkZl9zb2x1dGlvbikNCmBgYA0KDQoqIFNldCB0aGVvcnkgY2FuIG9mdGVuIGJlIHRvdWdodCBvZiBpbiB0ZXJtcyBvZiB2ZW5uIGRpYWdyYW1zLiRQcihBLCBCKSA9IFByKEEpICsgUHIoQikgLSBQcihBIFxjYXAgQikkDQoNCiogKipDb25kaXRpb25hbCBwcm9iYWJpbGl0aXkqKjogSW4gYSB3b3JsZCB3aGVyZSBBIGhhcyBvY2N1cnJlZCwgd2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgQiB3aWxsIGFsc28gb2NjdXI/ICRQcm9iKEF8QikgPSBcZnJhY3tQcihBLCBCKX17UHIoQil9JA0KDQo+PiBRdWVzdGlvbjogV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2Ygcm9sbGluZyBhIDYgaW4gZGljZSAyLCBnaXZlIHRoYXQgeW91IHJvbGxlZCBhIDIgaW4gZGljZSAxPw0KDQpgYGB7cn0NCm5yb3coZmlsdGVyKGRmLCBEMSA9PSAyICYgRDIgPT0gNikpIC8gDQogIG5yb3coZmlsdGVyKGRmLCBEMSA9PSAyKSkNCmBgYA0KDQoqICoqTmFpdmUgQmF5ZXMgUnVsZSoqOiAkUHIoQXxCKSA9IFxmcmFje1ByKEJ8QSlQcihBKX17UHIoQil9JA0KDQoNCiMgTW9udHkgaGFsbCBleGFtcGxlDQoNCk1vbnR5IGhhbGwgcHJlc2VudHMgdGhlZSBkb29ycy4gVHdvIGhhdmUgZ29hdHMgYmVoaW5kIHRoZW0sIG9uZSBoYXMgYSBtaWxsaW9uIGRvbGxhcnMgYmVoaW5kIHRoZW0uIExldHMgc3RhcnQgYnkgZW51bWVyYXRpbmcgYWxsIHRoZSBwb3NzaWJsZSBzdGF0ZXMgdGhlc2UgZG9vcnMgY2FuIHRha2UuDQoNCmBgYHtyfQ0KZGZfcG9zc2liaWxpdGllcyA8LSBjb21iaW5hdDo6cGVybW4oYyhkMSA9ICJnIiwgZDIgPSAiZyIsIGQzID0gIm0iKSkgJT4lIA0KICByZWR1Y2UocmJpbmQpICU+JSANCiAgYXNfdGliYmxlDQoNCmRmX3Bvc3NpYmlsaXRpZXMNCmBgYA0KDQpOb3csIGxldHMgc2F5IHdlIG9wZW4gZDEuIE1vbnR5IHRoZW4gb3BlbnMgZDIgdG8gcmV2ZWFsIGEgZ29hdC4gV2hhdHMgdGhlIGxpa2VsaWhvb2QgdGhhdCBkMSBoYXMgYSBtaWxsaW9uIGRvbGxhcnMgZ2l2ZW4gd2hhdCB3ZSBrbm93PyBXaGF0IGlzIHRoZSBsaWtlbGlob29kIHRoYXQgZDMgaGFzIGEgbWlsbGlvbiBkb2xsYXJzIGdpdmVuIHdoYXQgd2Uga25vdz8gV2VsbCB3ZSBtYWRlIHRoZSBkZWNpc2lvbiB0byBvcGVuIGRvb3IgMSBiZWZvcmUgYW55dGhpbmcgd2FzIHJldmVhbGVkLiBUaGUgcHJvYmFiaWxpdHkgdGhhdCBgZDEgPT0gTWAgaXMgJFxmcmFjezF9ezN9JC4NCmBgYHtyfQ0KZGZfcG9zc2liaWxpdGllcyAlPiUgDQogIGZpbHRlcihkMSA9PSAibSIpICU+JSANCiAgdGFsbHkgJT4lIA0KICBtYWdyaXR0cjo6ZGl2aWRlX2J5KG5yb3coZGZfcG9zc2liaWxpdGllcykpDQpgYGANCg0KTW9udHkgZG9lc24ndCByZXZlYWwgZG9vcnMgd2lsbHkgbmlsbHkuIEhlcyBwbGF5aW5nIGZvciBrZWVwcy4gU28gaGUgb25seSByZXZlYWxzIGRvb3IgaSBpZiBpdCBkb2Vzbid0IGhhdmUgYSBtaWxsaW9uIGRvbGxhcnMgYmVoaW5kIGl0LiBMZXRzIHJlZmVyIHRvIHRoZSByZXZlbGF0aW9uIGV2ZW50IGFzIEIuIExldHMgc3VwcG9zZSBoZSByZXZlbGFzIGRvb3IgMiAoJGJfMiQpDQoNCiQkDQpcYmVnaW57YWxpZ259DQpQcihkXzMgfCBiXzIpID0mIFxmcmFje1ByKGJfMiB8IGRfMykgXHRpbWVzIFByKGRfMyl9e1ByKGJfMil9IA0KXFwgPSAmIFxmcmFje1ByKGJfMiB8IGRfMykgXHRpbWVzIFByKGRfMyl9e1ByKGJfMnxkXzEpUHIoZF8xKSArIFByKGJfMnxkXzIpUHIoZF8yKSArIFByKGJfMnxkXzMpUHIoZF8zKX0gDQpcXCA9ICYgXGZyYWMgezEgXHRpbWVzIFxmcmFjezF9ezN9fSB7MSBcdGltZXMgXGZyYWN7MX17M30gKyAwIFx0aW1lcyBcZnJhY3sxfXszfSArIFxmcmFjezF9ezJ9IFx0aW1lcyBcZnJhY3sxfXszfX0NClxcID0gJiBcZnJhY3syfXszfQ0KXGVuZHthbGlnbn0NCiQkDQoNCg0KIyBFeGVyY2lzZXMNCg==</div>
 
 
 
